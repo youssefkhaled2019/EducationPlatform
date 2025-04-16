@@ -9,8 +9,6 @@ class SubjecAdmin(admin.ModelAdmin):
 
 class ModuleInLine(admin.StackedInline):
     model=Module
-    # all_fields = [f.name for f in Module._meta.fields]  #+["id"]                   #SHOW ALL FILDES
-    # list_display=all_fields
     
 @admin.register(Module)
 class ModuleAdmin(admin.ModelAdmin):
