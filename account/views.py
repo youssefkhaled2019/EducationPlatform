@@ -18,13 +18,35 @@ def sign_up(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('account:view-profile')
+                return redirect('course:subject_courses_list')#account:view-profile
 
     context = {
         'form':form
     }
-    return render(request, 'accounts/sign_up.html', context)
+    return render(request, 'account/sign_up.html', context)
 
 def sign_out(request):
     logout(request)
-    return redirect('account:sign_up')
+    return redirect('account:sign_in')
+
+def sign_in(request):
+    ERROR = None
+    if request.user.is_authenticated:
+        return redirect('course:subject_courses_list')
+    
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('course:subject_courses_list')
+        else:
+            ERROR = 'Invalid credentials!, Password or username is invalid!'
+    
+    
+    context = {
+        'error':ERROR
+    }        
+    
+    return render(request, 'account/sing_in.html', context)

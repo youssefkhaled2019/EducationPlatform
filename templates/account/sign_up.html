@@ -20,7 +20,11 @@
       <div class="text-center">
         <p class="text-sm text-gray-600">
           Already have an account?
-          <a href="" class="text-indigo-600 hover:underline">Sign In</a>
+          <a
+            href="{% url 'account:sign_in' %}"
+            class="text-indigo-600 hover:underline"
+            >Sign In</a
+          >
         </p>
       </div>
     </form>
