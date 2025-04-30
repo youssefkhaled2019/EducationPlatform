@@ -1,28 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-    {% block title %}
-    E-Learning Platform
-    {% endblock title %}
-         
-        </title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} E-Learning Platform {% endblock title %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
+  </head>
 
-<body class="bg-gray-100">
+  <body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-white p-4 shadow-md">
+      <div class="container mx-auto flex justify-between items-center">
+        <a href="#" class="text-2xl font-bold text-gray-800">E-Learn</a>
+        <ul class="flex space-x-4">
+          {% if user.is_authenticated %}
+          <li>
+            <a href="#" class="text-gray-600 hover:text-blue-500"
+              >Welcome, {{request.user}}</a
+            >
+          </li>
+          <li>
+            <a
+              href="{% url 'account:view-profile' %}"
+              class="text-gray-600 hover:text-blue-500"
+              >Profile</a
+            >
+          </li>
+          {% endif %}
 
+          <li>
+            <a href="#" class="text-gray-600 hover:text-blue-500">Courses</a>
+          </li>
+          <li>
+            <a href="#" class="text-gray-600 hover:text-blue-500">Categories</a>
+          </li>
 
-    
-    {% block content %}
-        
-    {% endblock content %}
-        
-</body>
+          {% if user.is_authenticated %}
 
+          <li>
+            <a
+              href="{% url 'account:sign_out' %}"
+              class="text-gray-600 hover:text-blue-500"
+              >Sign-out</a
+            >
+          </li>
+          {% else %}
+          <li>
+            <a
+              href="{% url 'account:sign_in' %}"
+              class="text-gray-600 hover:text-blue-500"
+              >Sign-In</a
+            >
+          </li>
+          <li>
+            <a
+              href="{% url 'account:sign_up' %}"
+              class="text-gray-600 hover:text-blue-500"
+              >Sign-Up</a
+            >
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
 
-
-
+    {% block content %} {% endblock content %}
+  </body>
 </html>

@@ -5,7 +5,7 @@ go.bat
 runserver.bat
 help.txt
 help2.txt
-
+media/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -1,7 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SignUpForm
 from django.contrib.auth import login, logout, authenticate
+from .models import InstructorProfile
+from .forms import InstructorProfileForm
+from course.models import Course
+from django.contrib.auth.decorators import login_required
 # Create your views here.
+
 def sign_up(request):
     
     form = SignUpForm()
@@ -10,7 +15,7 @@ def sign_up(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # InstructorProfile.objects.create(user=user)
+            InstructorProfile.objects.create(user=user)
             
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
@@ -50,3 +55,31 @@ def sign_in(request):
     }        
     
     return render(request, 'account/sing_in.html', context)
+
+
+
+@login_required(login_url='account:sign_up')
+def view_profile(request):
+    profile = get_object_or_404(InstructorProfile, user=request.user)
+    courses = Course.objects.filter(owner=request.user)
+    context = {
+        'profile':profile,
+        'courses': courses,
+    }
+    return render(request, 'account/view_profile.html', context)
+
+
+@login_required(login_url='account:sign_up')
+def edit_profile(request):
+    profile = get_object_or_404(InstructorProfile, user=request.user)
+    form = InstructorProfileForm(instance=profile)
+    if request.method == 'POST':
+        form = InstructorProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('account:view-profile')
+    
+    context = {
+        'form': form,
+    }
+    return render(request, 'account/edit_profile.html', context)
