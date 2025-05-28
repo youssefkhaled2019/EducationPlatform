@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Subject,Course,Module
+from .models import Subject,Course,Module ,Content,Text,File,Image,Video
 # Register your models here.
 @admin.register(Subject)
 class SubjecAdmin(admin.ModelAdmin):
@@ -25,3 +25,32 @@ class CourseAdmin(admin.ModelAdmin):
      prepopulated_fields = {'slug': ('title',)}
      inlines=[ModuleInLine]
 # admin.site.register(Course)
+
+
+
+# ,Content,Text,File,Image,Video
+@admin.register(Content)
+class ContentAdmin(admin.ModelAdmin):
+    all_fields = [f.name for f in Content._meta.fields]  #+["id"]                   #SHOW ALL FILDES
+    list_display=all_fields
+
+@admin.register(Text)
+class TextAdmin(admin.ModelAdmin):
+    all_fields = [f.name for f in Text._meta.fields]  #+["id"]                   #SHOW ALL FILDES
+    list_display=all_fields
+
+@admin.register(File)
+class FileAdmin(admin.ModelAdmin):
+    all_fields = [f.name for f in File._meta.fields]  #+["id"]                   #SHOW ALL FILDES
+    list_display=all_fields
+
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    all_fields = [f.name for f in Image._meta.fields]  #+["id"]                   #SHOW ALL FILDES
+    list_display=all_fields
+
+
+@admin.register(Video)
+class VideoAdmin(admin.ModelAdmin):
+    all_fields = [f.name for f in Video._meta.fields]  #+["id"]                   #SHOW ALL FILDES
+    list_display=all_fields

@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey,GenericRelation
 
 # Create your models here.
 class Subject(models.Model): #categorías
@@ -58,7 +58,8 @@ class ItemBase(models.Model):
         return self.title     
     
 class Text(ItemBase):
-    text=models.TextField()
+    text=models.TextField()      # https://stackoverflow.com/questions/40148630/understanding-django-genericforeignkey-and-genericrelation
+    # relation= GenericRelation(Content, content_type_field='content_type', object_id_field='objects_id')
 class File(ItemBase):
     file=models.FileField(upload_to="file")
 class Image(ItemBase):
