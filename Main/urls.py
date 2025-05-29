@@ -21,8 +21,8 @@ from django.conf import settings    #youssef
 from django.conf.urls.static import static  #youssef
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("course.urls",namespace='course')),
-        path('account/', include("account.urls",namespace='account')),
+    path('', include("course.urls")),#include("course.urls",namespace='course')
+    path('account/', include("account.urls",namespace='account')),
 ]
 if settings.DEBUG:
 	urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

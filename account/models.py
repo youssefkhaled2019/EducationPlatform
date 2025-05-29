@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 class InstructorProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     bio  = models.TextField(blank=True, null=True)
-    photo = models.ImageField(upload_to='instructors/photos', blank=True, null=True)
+    photo = models.ImageField(upload_to='instructors/photos', blank=True, null=True,default="43790986.jpg")
     contact_email = models.EmailField(blank=True, null=True)
     header = models.CharField(max_length=255, blank=True, null=True)
     

@@ -22,7 +22,8 @@ class CourseAdmin(admin.ModelAdmin):
      list_display=all_fields
      list_filter=["created"]
      search_fields=['title','overview']
-     prepopulated_fields = {'slug': ('title',)}
+     #  prepopulated_fields = {'slug': ('title',)}
+     readonly_fields=['slug']
      inlines=[ModuleInLine]
 # admin.site.register(Course)
 
