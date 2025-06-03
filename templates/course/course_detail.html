@@ -1,19 +1,16 @@
-{% extends 'base.html' %} 
-{% block title %} {{ detail.title }} 
-{% endblock title %} {% block content %}
+{% extends 'base.html' %} {% block title %} {{ detail.title }} {% endblock title %} {% block content %}
 <!-- Course Details Section -->
 <section class="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
   <div class="container mx-auto text-center">
     <h1 class="text-4xl font-extrabold mb-6">{{ detail.title }}</h1>
-    <p class="text-lg mb-8">
-     {{ detail.overview }}
-    </p>
-
+    <p class="text-lg mb-8">{{ detail.overview }}</p>
+    {% if not test_enroll %}
     <a
-      href="#"
+      href="{% url 'course:enroll_course' detail.slug  %}"
       class="inline-block bg-white text-blue-600 font-bold py-2 px-6 rounded hover:bg-gray-100"
       >Enroll Now</a
     >
+    {% endif %}
   </div>
 </section>
 
@@ -24,11 +21,11 @@
     <p class="text-gray-600">Explore the modules included in this course.</p>
   </div>
 
-  {% if perms.courses.can_add_module %}
+  {% if perms.course.add_module %}
   <!-- Add Module Button -->
   <div class="text-right mb-6">
     <a
-      href="#"
+      href="{% url 'course:add_module' detail.slug  %}"
       class="bg-blue-600 text-white font-bold py-2 px-6 rounded hover:bg-blue-700 transition"
     >
       + Add Module
@@ -71,9 +68,11 @@
       </div>
       <div>
         <img
-          src="https://placehold.co/600x400"
+          src="{{ detail.img1.url }}"
           alt="Course Image"
           class="rounded shadow-lg"
+          style="float: right; max-height: 400px"
+          width="80%"
         />
       </div>
     </div>

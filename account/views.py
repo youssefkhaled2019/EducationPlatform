@@ -5,6 +5,7 @@ from .models import InstructorProfile
 from .forms import InstructorProfileForm
 from course.models import Course
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import  Group
 # Create your views here.
 
 def sign_up(request):
@@ -15,10 +16,18 @@ def sign_up(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            InstructorProfile.objects.create(user=user)
+            InstructorProfile.objects.create(user=user,jop=form.cleaned_data.get('role'))
             
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
+            # ===================================
+            role=form.cleaned_data.get('role')
+            print("ffff",role)
+            group = Group.objects.get(name__icontains=role)
+            user.groups.add(group)
+            # ==========================
+            # Group.objects.get(name__icontains="Instructor")
+            # ===================================
             
             user = authenticate(request, username=username, password=password)
             if user is not None:
@@ -60,8 +69,17 @@ def sign_in(request):
 
 @login_required(login_url='account:sign_up')
 def view_profile(request):
-    profile = get_object_or_404(InstructorProfile, user=request.user)
-    courses = Course.objects.filter(owner=request.user)
+ 
+
+
+    try:
+        profile = get_object_or_404(InstructorProfile, user=request.user)
+        courses = Course.objects.filter(owner=request.user)
+    except :
+       profile=InstructorProfile.objects.create(user=request.user)
+       courses = Course.objects.filter(owner=request.user)
+
+
     context = {
         'profile':profile,
         'courses': courses,

@@ -5,6 +5,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey,GenericRelation
 from django.utils.text import slugify
 
+
+from PIL.Image import  open
 # Create your models here.
 class Subject(models.Model): #categorías
     title=models.CharField(max_length=250)
@@ -19,13 +21,19 @@ class Course(models.Model):
     class Status(models.TextChoices):
         AVAILABLE='AV','Avsilable'
         DEREFT='DF','Dreft'
+    
     owner=models.ForeignKey(User,related_name="courses_created",on_delete=models.CASCADE)
     subject=models.ForeignKey(Subject,related_name="courses",on_delete=models.CASCADE)
     title=models.CharField(max_length=250)
+    img1=models.ImageField(upload_to="course_img/%y/%m/%d",blank=True, null=True,default="course.svg")
     slug=models.SlugField(max_length=250,unique=True)
     overview=models.TextField()
     created=models.DateTimeField(auto_now_add=True)
     status=models.CharField(max_length=2 ,choices=Status,default=Status.AVAILABLE)
+    students = models.ManyToManyField(User, related_name='enrolled_courses', blank=True)
+    num_enroll=models.IntegerField(default=0)
+   
+
     class Meta:
         ordering=["-created"]
     def __str__(self):
@@ -33,8 +41,15 @@ class Course(models.Model):
 
         
     def save(self, *args, **kwargs):
-        if not self.slug :#or self.title != Course.objects.get(pk=self.pk).title if self.pk else None
+        if not self.slug or self.title != self.slug  :#r self.title != Course.objects.get(pk=self.pk).title if self.pk else None 
             self.slug = slugify(self.title)
+
+        # img=open(self.img1.path)
+        # print(self.img1.path)
+        # if img.height>400 or img.width>300:
+        #     size=(400,300)
+        #     img.thumbnail(size)
+        #     img.save(self.img1.path)    
         return super().save(*args, **kwargs)        
 
 
@@ -53,8 +68,8 @@ class Content(models.Model):
     item=GenericForeignKey("content_type","objects_id")    
 
 
-class ItemBase(models.Model):
-    owner=models.ForeignKey(User,related_name="%(class)s_related",on_delete=models.CASCADE) 
+class ItemBase(models.Model):   # related_name="%(class)s_related"
+    owner=models.ForeignKey(User,related_name='%(class)s_related',on_delete=models.CASCADE) 
     title=models.CharField(max_length=250) 
     creates=models.DateTimeField(auto_now_add=True)  
     update=models.DateTimeField(auto_now=True) 
